@@ -1,50 +1,61 @@
-import React, { Component } from 'react';
+import React, { lazy, Suspense, Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Nav from './components/nav/Nav';
-import HomePage from './pages/HomePage';
+import MoviesDetailsPage from './pages/MovieDetailsPage';
+import axios from 'axios';
+import * as settings from './components/settings';
+
+const AsyncHomePage = lazy(() =>
+  import('./pages/HomePage' /* webpackChankName: "home-page" */),
+);
+const AsyncMoviesPage = lazy(() =>
+  import('./pages/MoviesPage' /* webpackChankName: "movies-page" */),
+);
+
+axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
+// const settings = {
+//   popularFilms: 'trending/movie/day',
+// };
 
 class App extends Component {
-  state = {};
+  state = {
+    moviesList: [],
+  };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getData();
+  }
   componentDidUpdate(prevProps, prevState) {}
 
-  //   getImages() {
-  //   const { query, page } = this.state;
-  //   const reqest = `https://pixabay.com/api/?q=${query}&page=${page}&key=${key}&image_type=photo&orientation=horizontal&per_page=12`;
-  //   this.setState({ isLoading: true });
-  //   fetch(reqest)
-  //     .then(respons => respons.json())
-  //     .then(results =>
-  //       results.hits.map(({ id, webformatURL, largeImageURL }) => ({
-  //         id,
-  //         webformatURL,
-  //         largeImageURL,
-  //       })),
-  //     )
-  //     .then(data => {
-  //       this.setState(prev => ({ imagesList: [...prev.imagesList, ...data] }));
-  //       return data;
-  //     })
-  //     .then(data => this.scrollDown())
-  //     .catch(error => console.log('Error = ', error))
-  //     .finally(() => this.setState({ isLoading: false }));
-  // }
-
-  // btnClick = () => {
-  //   this.setState(prevState => ({ page: prevState.page + 1 }));
-  // };
-
+  async getData() {
+    const popular = `${settings.popularFilms}?api_key=${process.env.REACT_APP_MOVIEDB_KEY}`;
+    try {
+      const response = await axios.get(popular);
+      this.setState(prev => ({
+        moviesList: [...prev.moviesList, ...response.data.results],
+      }));
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  }
   render() {
-    const {} = this.state;
+    const { moviesList } = this.state;
     return (
       <>
-        <h1>TEST HOME WORK 04 REACT</h1>
         <Nav />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/acc" component={HomePage} />
-        </Switch>
+        <Suspense fallback={<h1>Loading...</h1>}>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <AsyncHomePage {...props} moviesList={moviesList} />
+              )}
+            />
+            <Route path="/movies/:movieId" component={MoviesDetailsPage} />
+            <Route path="/movies" component={AsyncMoviesPage} />
+          </Switch>
+        </Suspense>
       </>
     );
   }
