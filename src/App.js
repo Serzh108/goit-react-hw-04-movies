@@ -38,6 +38,7 @@ class App extends Component {
       console.log('Error: ', error);
     }
   }
+  
   render() {
     const { moviesList } = this.state;
     return (
