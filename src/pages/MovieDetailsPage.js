@@ -9,10 +9,7 @@ const AsyncCast = lazy(() =>
 );
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
-// const settings = {
-//   movieDetails: 'movie/',
-//   imagePath: 'https://image.tmdb.org/t/p/w500',
-// };
+
 
 class MovieDetailsPage extends Component {
   state = { moveiInfo: {} };
@@ -39,9 +36,25 @@ class MovieDetailsPage extends Component {
   handleClickBack = () => {
     const { history, location } = this.props;
     if (location.state) {
+      // if (location.state.from.pathname === '/movies') {
+      //   // console.log(
+      //   //   'location.from /movies = ',
+      //   //   JSON.stringify(location.state.from),
+      //   // );
+      //   return history.push(location.state.from)
+      // } else {
+      //   console.log(
+      //     'location.from /movies/... = ',
+      //     JSON.stringify(location.state.from),
+      //     // JSON.stringify(location.state.from.state.from),
+      //   );
+      //   return history.push(location.state.from)
+      // }
+
       return history.push(location.state.from);
     }
-    history.push('/');
+    // history.push(location.state.from);
+    // history.push('/');
   };
 
   render() {
@@ -94,6 +107,7 @@ class MovieDetailsPage extends Component {
               <Link
                 to={{
                   pathname: `/movies/${id}/cast`,
+                  state: { from: this.props.location.state.from },
                 }}>
                 Cast
               </Link>
@@ -102,6 +116,7 @@ class MovieDetailsPage extends Component {
               <Link
                 to={{
                   pathname: `/movies/${id}/reviews`,
+                  state: { from: this.props.location.state.from },
                 }}>
                 Reviews
               </Link>

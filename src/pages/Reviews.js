@@ -4,9 +4,6 @@ import * as settings from '../components/settings';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
-// const settings = {
-//   movieDetails: 'movie/',
-// };
 
 class Reviews extends Component {
   state = { reviewsData: [] };

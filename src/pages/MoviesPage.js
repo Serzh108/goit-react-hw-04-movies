@@ -4,9 +4,6 @@ import axios from 'axios';
 import * as settings from '../components/settings';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
-// const settings = {
-//   keyWordSearch: 'search/movie',
-// };
 
 class MoviesPage extends Component {
   state = {

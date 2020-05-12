@@ -1,15 +1,18 @@
 import React, { lazy, Suspense, Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Nav from './components/nav/Nav';
-import MoviesDetailsPage from './pages/MovieDetailsPage';
+// import MoviesDetailsPage from './pages/MovieDetailsPage';
 import axios from 'axios';
 import * as settings from './components/settings';
 
 const AsyncHomePage = lazy(() =>
-  import('./pages/HomePage' /* webpackChankName: "home-page" */),
+  import('./pages/HomePage' /* webpackChankName: "homePage" */),
 );
 const AsyncMoviesPage = lazy(() =>
-  import('./pages/MoviesPage' /* webpackChankName: "movies-page" */),
+  import('./pages/MoviesPage' /* webpackChankName: "moviesPage" */),
+);
+const AsyncMoviesDetailsPage = lazy(() =>
+  import('./pages/MovieDetailsPage' /* webpackChankName: "moviesdDtailsPage" */),
 );
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
@@ -53,7 +56,7 @@ class App extends Component {
                 <AsyncHomePage {...props} moviesList={moviesList} />
               )}
             />
-            <Route path="/movies/:movieId" component={MoviesDetailsPage} />
+            <Route path="/movies/:movieId" component={AsyncMoviesDetailsPage} />
             <Route path="/movies" component={AsyncMoviesPage} />
           </Switch>
         </Suspense>

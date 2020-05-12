@@ -12,7 +12,7 @@ const HomePage = ({ moviesList }) => {
             <Link
               to={{
                 pathname: `/movies/${movie.id}`,
-                state: { from: '/' },
+                state: { from: '/', pathname: '/' },
               }}>
               {movie.title}
             </Link>
