@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import * as settings from '../components/settings';
+import querySrting from 'query-string';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
@@ -24,6 +25,11 @@ class MoviesPage extends Component {
   };
 
   handleOnChange = e => this.setState({ value: e.target.value });
+
+  componentDidMount() {
+    const parsed = querySrting.parse(this.props.location.search);
+    this.getData(parsed.query);
+  }
 
   getData = async query => {
     if (query) {
